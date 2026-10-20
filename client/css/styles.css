@@ -311,6 +311,26 @@ a:focus-visible {
 }
 
 /* ============================================
+   Hero Section
+   ============================================ */
+
+.hero-description {
+  max-width: 65ch;
+  margin: var(--space-lg) auto 0 auto;
+  line-height: 1.7;
+  color: var(--color-text);
+  font-size: var(--font-base);
+}
+
+/* Responsive adjustments for hero description */
+@media (max-width: 360px) {
+  .hero-description {
+    font-size: var(--font-sm);
+    max-width: 100%;
+  }
+}
+
+/* ============================================
    Container & Layout
    ============================================ */
 
