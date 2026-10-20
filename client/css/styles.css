@@ -434,6 +434,36 @@ a:focus-visible {
   margin-bottom: 0;
 }
 
+/* Clickable card links */
+.card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.card-link:hover {
+  text-decoration: none;
+  color: inherit;
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 16px var(--color-shadow);
+}
+
+.card-link:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 3px;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px var(--color-shadow);
+}
+
+.card-link .card-title {
+  color: var(--color-primary-dark);
+}
+
+.card-link .card-text {
+  color: var(--color-text-muted);
+}
+
 /* ============================================
    Buttons
    ============================================ */
