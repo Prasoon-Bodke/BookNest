@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View detailed information about a book">
+  <title>Book Details - BookNest</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Site Header with Navigation -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="site-logo">📚 BookNest</a>
+
+      <!-- Mobile menu toggle button -->
+      <button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        Menu
+      </button>
+
+      <!-- Main Navigation -->
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="search.html">Search Books</a></li>
+          <li><a href="shelf.html">My Shelf</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Back to search link -->
+    <div class="mt-lg mb-md">
+      <a href="search.html" class="btn btn-outline btn-small">← Back to Search</a>
+    </div>
+
+    <!-- Book details will be loaded here dynamically -->
+    <section id="book-details">
+      <div class="card">
+        <p class="text-center text-muted" aria-live="polite">Loading book details...</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p>&copy; 2026 BookNest.</p>
+      <p>Powered by <a href="https://openlibrary.org/" target="_blank" rel="noopener">Open Library API</a></p>
+    </div>
+  </footer>
+
+  <!-- JavaScript for mobile menu toggle -->
+  <script>
+    // Mobile menu toggle functionality
+    const menuToggle = document.querySelector('.menu-toggle');
+    const siteNav = document.querySelector('.site-nav');
+
+    menuToggle.addEventListener('click', function() {
+      const isOpen = siteNav.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', isOpen);
+    });
+  </script>
+
+  <!-- Book details functionality - ES6 module -->
+  <script type="module" src="js/book.js"></script>
+</body>
+</html>

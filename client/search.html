@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Search for books in the Open Library collection">
+  <title>Search Books - BookNest</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Site Header with Navigation -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="site-logo">📚 BookNest</a>
+
+      <!-- Mobile menu toggle button -->
+      <button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        Menu
+      </button>
+
+      <!-- Main Navigation -->
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="search.html" class="active" aria-current="page">Search Books</a></li>
+          <li><a href="shelf.html">My Shelf</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <section class="mt-xl mb-2xl">
+      <h1>Search Books</h1>
+      <p class="text-muted">Search millions of books from the Open Library collection</p>
+    </section>
+
+    <!-- Search form -->
+    <section class="container-narrow mb-xl">
+      <div class="card">
+        <form id="search-form">
+          <div class="form-group">
+            <label for="search-input">Enter book title, author, or ISBN</label>
+            <input
+              type="search"
+              id="search-input"
+              name="query"
+              placeholder="e.g., The Great Gatsby"
+              aria-label="Search for books"
+              required
+            >
+          </div>
+
+          <!-- Filters and sorting -->
+          <details class="mt-lg" id="filters-section">
+            <summary class="text-large font-bold" style="cursor: pointer;">
+              Filters & Sorting
+            </summary>
+
+            <div class="grid grid-2 mt-md">
+              <!-- Language filter -->
+              <div class="form-group">
+                <label for="language-filter">Language</label>
+                <select id="language-filter" name="language">
+                  <option value="">All languages</option>
+                  <option value="eng">English</option>
+                  <option value="spa">Spanish</option>
+                  <option value="fre">French</option>
+                  <option value="ger">German</option>
+                  <option value="ita">Italian</option>
+                  <option value="por">Portuguese</option>
+                  <option value="jpn">Japanese</option>
+                  <option value="chi">Chinese</option>
+                </select>
+              </div>
+
+              <!-- Sort order -->
+              <div class="form-group">
+                <label for="sort-select">Sort by</label>
+                <select id="sort-select" name="sort">
+                  <option value="">Relevance (default)</option>
+                  <option value="new">Newest first</option>
+                  <option value="old">Oldest first</option>
+                  <option value="title">Title A-Z</option>
+                </select>
+              </div>
+
+              <!-- Year range - from -->
+              <div class="form-group">
+                <label for="year-from">Published from year</label>
+                <input
+                  type="number"
+                  id="year-from"
+                  name="yearFrom"
+                  placeholder="e.g., 1900"
+                  min="1000"
+                  max="2026"
+                >
+              </div>
+
+              <!-- Year range - to -->
+              <div class="form-group">
+                <label for="year-to">Published to year</label>
+                <input
+                  type="number"
+                  id="year-to"
+                  name="yearTo"
+                  placeholder="e.g., 2020"
+                  min="1000"
+                  max="2026"
+                >
+              </div>
+            </div>
+
+            <!-- Only with covers - checkbox -->
+            <div class="form-group">
+              <label style="display: flex; align-items: center; gap: var(--space-sm);">
+                <input type="checkbox" id="has-cover" name="hasCover">
+                Only show books with cover images
+              </label>
+            </div>
+
+            <!-- Clear filters button -->
+            <button type="button" id="clear-filters" class="btn btn-outline btn-small">
+              Clear Filters
+            </button>
+          </details>
+
+          <button type="submit" class="btn btn-primary mt-md">Search</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Search results will be displayed here dynamically -->
+    <section id="search-results">
+      <p class="text-center text-muted">Enter a search query to find books</p>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p>&copy; 2026 BookNest.</p>
+      <p>Powered by <a href="https://openlibrary.org/" target="_blank" rel="noopener">Open Library API</a></p>
+    </div>
+  </footer>
+
+  <!-- JavaScript for mobile menu toggle -->
+  <script>
+    // Mobile menu toggle functionality
+    const menuToggle = document.querySelector('.menu-toggle');
+    const siteNav = document.querySelector('.site-nav');
+
+    menuToggle.addEventListener('click', function() {
+      const isOpen = siteNav.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', isOpen);
+    });
+  </script>
+
+  <!-- Search functionality - ES6 module -->
+  <script type="module" src="js/search.js"></script>
+</body>
+</html>

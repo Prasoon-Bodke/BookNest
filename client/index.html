@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BookNest - Your personal book search and reading tracker">
+  <title>BookNest - Home</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Site Header with Navigation -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="site-logo">📚 BookNest</a>
+
+      <!-- Mobile menu toggle button -->
+      <button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        Menu
+      </button>
+
+      <!-- Main Navigation -->
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html" class="active" aria-current="page">Home</a></li>
+          <li><a href="search.html">Search Books</a></li>
+          <li><a href="shelf.html">My Shelf</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <section class="text-center mt-2xl mb-2xl">
+      <h1>Welcome to BookNest</h1>
+      <p class="text-large text-muted">Your personal book search and reading tracker</p>
+    </section>
+
+    <!-- Placeholder content - will be built later -->
+    <section class="grid grid-3 mb-2xl">
+      <div class="card">
+        <h3 class="card-title">🔍 Search Books</h3>
+        <p class="card-text">Search millions of books from the Open Library collection.</p>
+      </div>
+      <div class="card">
+        <h3 class="card-title">📖 Track Reading</h3>
+        <p class="card-text">Keep a personal list of books you want to read or have read.</p>
+      </div>
+      <div class="card">
+        <h3 class="card-title">📚 Discover</h3>
+        <p class="card-text">Explore book details, covers, authors, and more.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p>&copy; 2026 BookNest.</p>
+      <p>Powered by <a href="https://openlibrary.org/" target="_blank" rel="noopener">Open Library API</a></p>
+    </div>
+  </footer>
+
+  <!-- JavaScript for mobile menu toggle -->
+  <script>
+    // Mobile menu toggle functionality
+    const menuToggle = document.querySelector('.menu-toggle');
+    const siteNav = document.querySelector('.site-nav');
+
+    menuToggle.addEventListener('click', function() {
+      const isOpen = siteNav.classList.toggle('open');
+      // Update ARIA attribute for accessibility
+      menuToggle.setAttribute('aria-expanded', isOpen);
+    });
+  </script>
+</body>
+</html>
