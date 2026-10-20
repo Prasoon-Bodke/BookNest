@@ -272,7 +272,8 @@ heroku open
 ## 🌐 Live Demo
 
 <!-- TODO: Add live demo link here -->
-**Live Demo:** [Coming Soon]
+**Live Demo:** 
+https://booknest-u863.onrender.com
 
 ---
 
