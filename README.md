@@ -181,6 +181,82 @@ Book data is provided by **[Open Library](https://openlibrary.org/)**, an open, 
 
 ---
 
+## 🚀 Deployment
+
+### Prerequisites for Deployment
+- Node.js 14.0.0 or higher
+- npm (comes with Node.js)
+
+### Deployment Checklist
+✅ **Port Configuration**: Server reads from `process.env.PORT` (defaults to 3000)  
+✅ **No Build Step**: Plain HTML/CSS/JS - no compilation needed  
+✅ **Static Files**: Server serves `/client` folder automatically  
+✅ **Data Directory**: `server/data/` is auto-created on first run  
+✅ **No Secrets**: Open Library API requires no authentication  
+✅ **Single Command**: `npm start` launches everything  
+
+### Generic Node Hosting Services
+
+Works with **Heroku, Render, Railway, Fly.io, Vercel, Netlify Functions, DigitalOcean App Platform, AWS Elastic Beanstalk, Google Cloud Run, Azure App Service**, and similar platforms.
+
+#### Required Settings
+
+| Setting | Value |
+|---------|-------|
+| **Build Command** | `npm install` |
+| **Start Command** | `npm start` |
+| **Port** | Auto-detected from `PORT` environment variable |
+| **Node Version** | 14.0.0 or higher (specified in `package.json`) |
+| **Root Directory** | `.` (project root) |
+
+#### Environment Variables
+No environment variables are required. Optional:
+- `PORT` - Server port (auto-provided by most platforms)
+
+#### Example: Deploying to Render
+
+1. Connect your GitHub repository
+2. Create new **Web Service**
+3. Settings:
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Environment**: Node
+4. Deploy
+
+#### Example: Deploying to Heroku
+
+```bash
+# Install Heroku CLI and login
+heroku login
+
+# Create app
+heroku create your-booknest-app
+
+# Deploy
+git push heroku main
+
+# Open
+heroku open
+```
+
+#### Example: Deploying to Railway
+
+1. Connect GitHub repository
+2. Railway auto-detects Node.js
+3. Automatically uses `npm install` and `npm start`
+4. Deploy
+
+### Post-Deployment Notes
+
+⚠️ **Data Persistence**: User data is stored in `server/data/shelves.json`. On platforms with ephemeral filesystems (Heroku, some serverless platforms), this file may be reset on restart. For production, consider:
+- Using a managed database (PostgreSQL, MongoDB)
+- Mounting a persistent volume
+- Using cloud storage (S3, Google Cloud Storage)
+
+⚠️ **Rate Limiting**: Open Library API has rate limits. For high-traffic deployments, consider implementing caching or a proxy.
+
+---
+
 ## 📸 Screenshots
 
 <!-- TODO: Add screenshots here -->
