@@ -93,11 +93,13 @@ async function displayBookDetails(book) {
   if (coverUrl) {
     const coverImg = document.createElement('img');
     coverImg.src = coverUrl;
-    coverImg.alt = `Cover of ${book.title}`;
+    coverImg.alt = `Cover image of ${book.title}`;
     coverDiv.appendChild(coverImg);
   } else {
     const placeholder = document.createElement('div');
     placeholder.className = 'cover-placeholder-large';
+    placeholder.setAttribute('role', 'img');
+    placeholder.setAttribute('aria-label', 'No cover image available');
     placeholder.textContent = '📖';
     coverDiv.appendChild(placeholder);
   }

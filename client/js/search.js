@@ -480,8 +480,8 @@ async function createBookCard(book) {
   card.innerHTML = `
     <div class="book-cover mb-md">
       ${coverUrl
-        ? `<img src="${coverUrl}" alt="Cover of ${book.title}" loading="lazy">`
-        : `<div class="cover-placeholder">📖</div>`
+        ? `<img src="${coverUrl}" alt="Cover image of ${escapeHtml(book.title)}" loading="lazy">`
+        : `<div class="cover-placeholder" role="img" aria-label="No cover image available">📖</div>`
       }
     </div>
     <h3 class="card-title">${escapeHtml(book.title)}</h3>
@@ -490,16 +490,16 @@ async function createBookCard(book) {
       ${year ? `<strong>Year:</strong> ${year}` : ''}
     </p>
     <div class="flex gap-sm mt-md" style="flex-wrap: wrap;">
-      <a href="book.html?key=${book.key}" class="btn btn-primary btn-small" style="flex: 1;">View Details</a>
+      <a href="book.html?key=${encodeURIComponent(book.key)}" class="btn btn-primary btn-small" style="flex: 1; min-width: 100px;">View Details</a>
       ${onShelf
-        ? `<button class="btn btn-secondary btn-small" disabled style="flex: 1;">✓ On Shelf</button>`
+        ? `<button class="btn btn-secondary btn-small" disabled style="flex: 1; min-width: 100px;" aria-label="Already on your shelf">✓ On Shelf</button>`
         : `<button class="btn-add-to-shelf btn btn-outline btn-small" data-book='${JSON.stringify({
             workKey: book.key,
             title: book.title,
             author: authors,
             coverId: book.cover_i || null,
             firstPublishYear: book.first_publish_year || null
-          })}' style="flex: 1;">+ Add to Shelf</button>`
+          })}' style="flex: 1; min-width: 100px;" aria-label="Add ${escapeHtml(book.title)} to your shelf">+ Add to Shelf</button>`
       }
     </div>
   `;

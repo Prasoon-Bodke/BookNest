@@ -109,8 +109,8 @@ function createShelfBookCard(book) {
   card.innerHTML = `
     <div class="book-cover mb-md">
       ${coverUrl
-        ? `<img src="${coverUrl}" alt="Cover of ${book.title}" loading="lazy">`
-        : `<div class="cover-placeholder">📖</div>`
+        ? `<img src="${coverUrl}" alt="Cover image of ${escapeHtml(book.title)}" loading="lazy">`
+        : `<div class="cover-placeholder" role="img" aria-label="No cover image available">📖</div>`
       }
     </div>
 
@@ -163,8 +163,8 @@ function createShelfBookCard(book) {
 
     <!-- Actions -->
     <div class="flex gap-sm" style="flex-wrap: wrap;">
-      <a href="book.html?key=${book.workKey}" class="btn btn-outline btn-small" style="flex: 1;">View Details</a>
-      <button class="btn-remove btn btn-outline btn-small" data-work-key="${book.workKey}" style="flex: 1;">Remove</button>
+      <a href="book.html?key=${encodeURIComponent(book.workKey)}" class="btn btn-outline btn-small" style="flex: 1; min-width: 100px;">View Details</a>
+      <button class="btn-remove btn btn-outline btn-small" data-work-key="${book.workKey}" style="flex: 1; min-width: 100px;" aria-label="Remove ${escapeHtml(book.title)} from shelf">Remove</button>
     </div>
   `;
 

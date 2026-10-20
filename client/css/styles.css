@@ -25,6 +25,10 @@
   --color-success: #2D5016;        /* Forest green */
   --color-error: #8B1A1A;          /* Dark red */
 
+  /* Accessible color combinations */
+  --color-nav-active-bg: #8B6914;  /* Darker gold for active nav (passes contrast with white) */
+  --color-footer-link: #FFD580;    /* Light gold for footer links (passes contrast on dark brown) */
+
   /* Spacing scale */
   --space-xs: 0.25rem;   /* 4px */
   --space-sm: 0.5rem;    /* 8px */
@@ -74,10 +78,13 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 main {
   flex: 1;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* ============================================
@@ -91,12 +98,35 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-primary-dark);
 }
 
-h1 { font-size: var(--font-3xl); }
-h2 { font-size: var(--font-2xl); }
-h3 { font-size: var(--font-xl); }
-h4 { font-size: var(--font-lg); }
-h5 { font-size: var(--font-base); }
-h6 { font-size: var(--font-sm); }
+h1 {
+  font-size: var(--font-3xl);
+}
+
+h2 {
+  font-size: var(--font-2xl);
+}
+
+h3 {
+  font-size: var(--font-xl);
+}
+
+h4 {
+  font-size: var(--font-lg);
+}
+
+h5 {
+  font-size: var(--font-base);
+}
+
+h6 {
+  font-size: var(--font-sm);
+}
+
+/* Responsive typography for small screens */
+@media (max-width: 360px) {
+  h1 { font-size: var(--font-2xl); }
+  h2 { font-size: var(--font-xl); }
+}
 
 p {
   margin-bottom: var(--space-md);
@@ -196,7 +226,11 @@ a:focus-visible {
 }
 
 .site-nav a.active {
-  background-color: var(--color-secondary-dark);
+  background-color: var(--color-nav-active-bg);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
 }
 
 /* Mobile navigation - stacks vertically on small screens */
@@ -214,6 +248,7 @@ a:focus-visible {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
+    z-index: 50;
   }
 
   .site-nav.open {
@@ -231,6 +266,13 @@ a:focus-visible {
     width: 100%;
     text-align: center;
   }
+}
+
+/* Focus styles for keyboard navigation */
+.menu-toggle:focus-visible,
+.site-nav a:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
 }
 
 /* ============================================
@@ -256,7 +298,16 @@ a:focus-visible {
 }
 
 .footer-container a {
-  color: var(--color-secondary);
+  color: var(--color-footer-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.footer-container a:hover,
+.footer-container a:focus-visible {
+  color: #FFF;
+  text-decoration-thickness: 2px;
 }
 
 /* ============================================
@@ -267,12 +318,24 @@ a:focus-visible {
   max-width: var(--container-max);
   margin: 0 auto;
   padding: var(--space-md);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .container-narrow {
   max-width: 800px;
   margin: 0 auto;
   padding: var(--space-md);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ensure containers don't cause horizontal scroll */
+@media (max-width: 360px) {
+  .container,
+  .container-narrow {
+    padding: var(--space-sm);
+  }
 }
 
 /* ============================================
@@ -370,7 +433,7 @@ a:focus-visible {
 }
 
 .btn:focus-visible {
-  outline: 2px solid currentColor;
+  outline: 3px solid var(--color-secondary);
   outline-offset: 2px;
 }
 
@@ -627,10 +690,24 @@ textarea {
   width: 100%;
 }
 
+/* Tablet: keep single column for better readability */
+@media (min-width: 640px) and (max-width: 767px) {
+  .book-detail-cover {
+    max-width: 300px;
+  }
+}
+
 /* Desktop: two columns (cover on left, info on right) */
 @media (min-width: 768px) {
   .book-detail-container {
     grid-template-columns: 300px 1fr;
+  }
+}
+
+/* Small mobile - ensure images don't overflow */
+@media (max-width: 360px) {
+  .book-detail-cover {
+    max-width: 100%;
   }
 }
 
@@ -648,6 +725,17 @@ textarea {
   width: 100%;
   height: auto;
   display: block;
+  object-fit: cover;
+}
+
+/* Ensure book covers don't overflow on small screens */
+.book-cover {
+  max-width: 100%;
+}
+
+.book-cover img {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Large cover placeholder */
@@ -766,6 +854,7 @@ textarea {
 .star-rating {
   display: flex;
   gap: var(--space-xs);
+  flex-wrap: wrap;
 }
 
 .star-btn {
@@ -774,15 +863,20 @@ textarea {
   font-size: var(--font-2xl);
   color: var(--color-border);
   cursor: pointer;
-  padding: 0;
+  padding: var(--space-xs);
   transition: all 0.2s ease;
   line-height: 1;
+  min-width: 32px;
+  min-height: 32px;
 }
 
 .star-btn:hover,
 .star-btn:focus-visible {
   color: var(--color-secondary);
   transform: scale(1.1);
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 .star-btn.active {
@@ -801,4 +895,73 @@ textarea {
 
 .text-right {
   text-align: right;
+}
+
+/* Ensure all interactive elements are keyboard accessible */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+/* Ensure proper word wrapping to prevent horizontal scroll */
+.card-title,
+.book-meta,
+.book-description,
+h1, h2, h3, h4, h5, h6,
+p, li {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* Make summary keyboard accessible */
+summary:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Small screen adjustments */
+@media (max-width: 360px) {
+  .flex {
+    flex-wrap: wrap;
+  }
+
+  .btn-small {
+    font-size: var(--font-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .filter-btn {
+    font-size: var(--font-sm);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .shelf-filters {
+    gap: var(--space-xs);
+  }
+
+  .site-logo {
+    font-size: var(--font-xl);
+  }
+}
+
+/* Medium screen adjustments (768px - 1280px) */
+@media (min-width: 768px) and (max-width: 1280px) {
+  .container {
+    max-width: 100%;
+    padding: var(--space-lg);
+  }
+}
+
+/* Large screen - maintain max width */
+@media (min-width: 1280px) {
+  .container {
+    max-width: var(--container-max);
+    padding: var(--space-xl);
+  }
 }
