@@ -4,6 +4,7 @@
    ============================================ */
 
 import { getWorkDetails, getCoverUrl } from './api.js';
+import { isBookOnShelf, addToShelf } from './shelfApi.js';
 
 // DOM elements
 let bookDetailsSection;
@@ -63,8 +64,11 @@ async function loadBookDetails(workKey) {
  * Display the book details in a formatted layout
  * @param {Object} book - Book data from API
  */
-function displayBookDetails(book) {
+async function displayBookDetails(book) {
   bookDetailsSection.innerHTML = '';
+
+  // Check if book is already on shelf
+  const onShelf = await isBookOnShelf(book.key);
 
   // Create main container
   const container = document.createElement('div');
@@ -100,12 +104,44 @@ function displayBookDetails(book) {
 
   leftColumn.appendChild(coverDiv);
 
-  // Add to shelf button (disabled for now)
-  const shelfButton = document.createElement('button');
-  shelfButton.className = 'btn btn-primary btn-large mt-md';
-  shelfButton.disabled = true;
-  shelfButton.innerHTML = '➕ Add to My Shelf <span class="badge-coming-soon">Coming Soon</span>';
-  leftColumn.appendChild(shelfButton);
+  // Add to shelf button or show shelf status
+  if (onShelf) {
+    const shelfStatus = document.createElement('button');
+    shelfStatus.className = 'btn btn-secondary btn-large mt-md';
+    shelfStatus.disabled = true;
+    shelfStatus.innerHTML = '✓ On Your Shelf';
+    leftColumn.appendChild(shelfStatus);
+
+    const viewShelfLink = document.createElement('a');
+    viewShelfLink.href = 'shelf.html';
+    viewShelfLink.className = 'btn btn-outline mt-sm';
+    viewShelfLink.textContent = 'View My Shelf';
+    leftColumn.appendChild(viewShelfLink);
+  } else {
+    // Create "Add to Shelf" form with status selection
+    const addForm = document.createElement('div');
+    addForm.className = 'mt-md';
+    addForm.innerHTML = `
+      <label for="shelf-status" class="mb-sm">Add to shelf as:</label>
+      <select id="shelf-status" class="mb-sm">
+        <option value="to-read">Want to Read</option>
+        <option value="reading">Currently Reading</option>
+        <option value="finished">Finished</option>
+      </select>
+      <button id="add-to-shelf-btn" class="btn btn-primary btn-large">
+        ➕ Add to My Shelf
+      </button>
+    `;
+    leftColumn.appendChild(addForm);
+
+    // Add event listener for the button
+    const addButton = addForm.querySelector('#add-to-shelf-btn');
+    const statusSelect = addForm.querySelector('#shelf-status');
+
+    addButton.addEventListener('click', async () => {
+      await handleAddToShelf(addButton, statusSelect, book);
+    });
+  }
 
   // RIGHT COLUMN: Book information
   const infoCard = document.createElement('div');
@@ -206,6 +242,61 @@ function displayBookDetails(book) {
   container.appendChild(rightColumn);
 
   bookDetailsSection.appendChild(container);
+}
+
+/**
+ * Handle adding a book to the shelf from the book detail page
+ * @param {HTMLElement} button - The add button
+ * @param {HTMLElement} statusSelect - The status dropdown
+ * @param {Object} book - Book data
+ */
+async function handleAddToShelf(button, statusSelect, book) {
+  // Show loading state
+  button.disabled = true;
+  button.textContent = 'Adding...';
+
+  try {
+    // Get selected status
+    const status = statusSelect.value;
+
+    // Add book to shelf
+    await addToShelf({
+      workKey: book.key,
+      title: book.title,
+      author: book.authors ? book.authors.join(', ') : 'Unknown Author',
+      coverId: book.cover_id || null,
+      firstPublishYear: book.first_publish_year || null,
+      status: status,
+      rating: 0,
+      notes: ''
+    });
+
+    // Show success and reload to show "On Shelf" state
+    button.textContent = '✓ Added!';
+    button.classList.remove('btn-primary');
+    button.classList.add('btn-secondary');
+
+    // Reload the page after a short delay to show the new state
+    setTimeout(() => {
+      location.reload();
+    }, 1000);
+
+  } catch (error) {
+    console.error('Error adding book to shelf:', error);
+
+    // Show error state
+    button.textContent = 'Failed';
+    button.disabled = false;
+
+    // Show error message
+    alert(error.message || 'Failed to add book to shelf. Please try again.');
+
+    // Reset button after 2 seconds
+    setTimeout(() => {
+      button.textContent = '➕ Add to My Shelf';
+      button.disabled = false;
+    }, 2000);
+  }
 }
 
 /**

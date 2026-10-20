@@ -4,6 +4,7 @@
    ============================================ */
 
 import { searchBooks, getCoverUrl } from './api.js';
+import { isBookOnShelf, addToShelf } from './shelfApi.js';
 
 // DOM elements
 let searchForm;
@@ -254,7 +255,7 @@ async function performSearch(query, page) {
  * Display search results as cards
  * @param {Object} results - Search results from API
  */
-function displayResults(results) {
+async function displayResults(results) {
   // Clear previous results
   searchResults.innerHTML = '';
   paginationContainer.innerHTML = '';
@@ -347,17 +348,63 @@ function displayResults(results) {
   const grid = document.createElement('div');
   grid.className = 'grid grid-4';
 
-  // Create a card for each book
-  results.docs.forEach(book => {
-    const card = createBookCard(book);
+  // Create a card for each book (now async)
+  for (const book of results.docs) {
+    const card = await createBookCard(book);
     grid.appendChild(card);
-  });
+  }
 
   searchResults.appendChild(grid);
 
   // Add pagination if needed
   if (results.numFound > RESULTS_PER_PAGE) {
     createPagination(results);
+  }
+}
+
+/**
+ * Handle adding a book to the shelf from search results
+ * @param {HTMLElement} button - The button that was clicked
+ * @param {Object} bookData - Book data to add
+ */
+async function handleAddToShelf(button, bookData) {
+  // Show loading state
+  button.disabled = true;
+  button.textContent = 'Adding...';
+
+  try {
+    // Add book with default status 'to-read'
+    await addToShelf({
+      ...bookData,
+      status: 'to-read',
+      rating: 0,
+      notes: ''
+    });
+
+    // Update button to show success
+    button.textContent = '✓ Added to Shelf';
+    button.classList.remove('btn-outline');
+    button.classList.add('btn-secondary');
+
+    // After 1 second, change to "On Shelf"
+    setTimeout(() => {
+      button.textContent = '✓ On Shelf';
+    }, 1000);
+
+  } catch (error) {
+    console.error('Error adding book to shelf:', error);
+
+    // Show error state
+    button.textContent = 'Failed';
+    button.disabled = false;
+
+    // Show error message
+    alert(error.message || 'Failed to add book to shelf. Please try again.');
+
+    // Reset button after 2 seconds
+    setTimeout(() => {
+      button.textContent = '+ Add to Shelf';
+    }, 2000);
   }
 }
 
@@ -407,7 +454,7 @@ function getSortName(sort) {
  * @param {Object} book - Book data from API
  * @returns {HTMLElement} Book card element
  */
-function createBookCard(book) {
+async function createBookCard(book) {
   const card = document.createElement('article');
   card.className = 'card';
 
@@ -426,6 +473,9 @@ function createBookCard(book) {
     ? `(${book.first_publish_year})`
     : '';
 
+  // Check if book is already on shelf
+  const onShelf = await isBookOnShelf(book.key);
+
   // Create card HTML
   card.innerHTML = `
     <div class="book-cover mb-md">
@@ -439,8 +489,30 @@ function createBookCard(book) {
       <strong>By:</strong> ${escapeHtml(authors)}<br>
       ${year ? `<strong>Year:</strong> ${year}` : ''}
     </p>
-    <a href="book.html?key=${book.key}" class="btn btn-primary btn-small mt-md">View Details</a>
+    <div class="flex gap-sm mt-md" style="flex-wrap: wrap;">
+      <a href="book.html?key=${book.key}" class="btn btn-primary btn-small" style="flex: 1;">View Details</a>
+      ${onShelf
+        ? `<button class="btn btn-secondary btn-small" disabled style="flex: 1;">✓ On Shelf</button>`
+        : `<button class="btn-add-to-shelf btn btn-outline btn-small" data-book='${JSON.stringify({
+            workKey: book.key,
+            title: book.title,
+            author: authors,
+            coverId: book.cover_i || null,
+            firstPublishYear: book.first_publish_year || null
+          })}' style="flex: 1;">+ Add to Shelf</button>`
+      }
+    </div>
   `;
+
+  // Add event listener for "Add to Shelf" button
+  const addButton = card.querySelector('.btn-add-to-shelf');
+  if (addButton) {
+    addButton.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const bookData = JSON.parse(addButton.dataset.book);
+      await handleAddToShelf(addButton, bookData);
+    });
+  }
 
   return card;
 }

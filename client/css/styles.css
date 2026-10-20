@@ -713,3 +713,92 @@ textarea {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* ============================================
+   Shelf Page Styles
+   ============================================ */
+
+/* Filter tabs */
+.shelf-filters {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: var(--space-sm);
+}
+
+.filter-btn {
+  background: none;
+  border: none;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-base);
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.filter-btn:hover {
+  background-color: var(--color-background);
+  color: var(--color-primary);
+}
+
+.filter-btn.active {
+  color: var(--color-primary);
+  background-color: var(--color-background);
+}
+
+.filter-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+/* Star rating */
+.star-rating {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: var(--font-2xl);
+  color: var(--color-border);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.star-btn:hover,
+.star-btn:focus-visible {
+  color: var(--color-secondary);
+  transform: scale(1.1);
+}
+
+.star-btn.active {
+  color: var(--color-secondary);
+}
+
+/* Notes input styling */
+.notes-input {
+  min-height: 80px;
+  font-size: var(--font-sm);
+}
+
+.text-xs {
+  font-size: var(--font-xs);
+}
+
+.text-right {
+  text-align: right;
+}

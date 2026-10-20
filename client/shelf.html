@@ -32,16 +32,31 @@
 
   <!-- Main Content -->
   <main class="container">
-    <section class="mt-xl mb-2xl">
+    <section class="mt-xl mb-lg">
       <h1>My Shelf</h1>
       <p class="text-muted">Your personal reading list</p>
     </section>
 
-    <!-- User's book shelf will be displayed here -->
-    <section id="my-shelf">
+    <!-- Filter tabs -->
+    <nav class="shelf-filters mb-xl" aria-label="Filter shelf by status">
+      <button class="filter-btn active" data-filter="all" aria-current="true">
+        All Books
+      </button>
+      <button class="filter-btn" data-filter="to-read">
+        Want to Read
+      </button>
+      <button class="filter-btn" data-filter="reading">
+        Currently Reading
+      </button>
+      <button class="filter-btn" data-filter="finished">
+        Finished
+      </button>
+    </nav>
+
+    <!-- Shelf container - books will be loaded here -->
+    <section id="shelf-container">
       <div class="card text-center">
-        <p class="text-muted">Your shelf is empty. Search for books and add them to your reading list!</p>
-        <a href="search.html" class="btn btn-primary mt-md">Search Books</a>
+        <p class="text-muted">Loading your shelf...</p>
       </div>
     </section>
   </main>
@@ -65,5 +80,8 @@
       menuToggle.setAttribute('aria-expanded', isOpen);
     });
   </script>
+
+  <!-- Shelf functionality - ES6 module -->
+  <script type="module" src="js/shelf.js"></script>
 </body>
 </html>
