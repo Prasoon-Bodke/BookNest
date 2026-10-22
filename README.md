@@ -255,23 +255,12 @@ heroku open
 
 ⚠️ **Rate Limiting**: Open Library API has rate limits. For high-traffic deployments, consider implementing caching or a proxy.
 
----
 
-## 📸 Screenshots
-
-<!-- TODO: Add screenshots here -->
-```
-[Home Page]
-[Search Results]
-[Book Detail Page]
-[My Shelf]
-```
 
 ---
 
 ## 🌐 Live Demo
 
-<!-- TODO: Add live demo link here -->
 **Live Demo:** 
 https://booknest-u863.onrender.com
 
